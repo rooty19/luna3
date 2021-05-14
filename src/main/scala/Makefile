@@ -1,0 +1,21 @@
+CXX = riscv32-unknown-elf-g++
+LD	= riscv32-unknown-elf-ld
+OBJCOPY = riscv32-unknown-elf-objcopy
+OBJDUMP = riscv32-unknown-elf-objdump
+CXXFLAGS = -march=rv32im
+LDFLAGS = -L/usr/local/riscv32/riscv32-unknown-elf/lib -Tlink.ld -static -e 0x00000000
+TargetP = imem.txt
+SourceP = fibonacci
+
+$ (TargetP) : 
+	g++ -o bin2hex bin2hex.cpp 
+	$(CXX) $(CXXFLAGS) -c -g0 -o $(SourceP).o $(SourceP).cpp
+	$(CXX) $(CXXFLAGS) -static -g0 -o $(SourceP)_spike $(SourceP).cpp
+	$(CXX) $(CXXFLAGS) -c -g0 -o start.o start.s
+	$(LD) start.o $(SourceP).o -lc $(LDFLAGS) -o $(SourceP)
+	$(OBJCOPY) -O binary $(SourceP) $(SourceP).bin
+	./bin2hex $(SourceP).bin > $(TargetP) 
+	$(OBJDUMP) -S $(SourceP)
+
+clean:
+	rm start.o $(SourceP).o $(SourceP).bin $(TargetP) $(SourceP)_spike $(SourceP) bin2hex

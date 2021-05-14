@@ -1,0 +1,459 @@
+[*]
+[*] GTKWave Analyzer v3.3.86 (w)1999-2017 BSI
+[*] Fri May 14 10:20:32 2021
+[*]
+[dumpfile] "/home/stereos/luna3/test_run_dir/chapter4/RV32_Unified/RV32_Unified.vcd"
+[dumpfile_mtime] "Fri May 14 03:38:56 2021"
+[dumpfile_size] 2009958
+[savefile] "/home/stereos/luna3/RV32I_wavelayout.gtkw"
+[timestart] 33
+[size] 1824 1153
+[pos] -1 -1
+*-2.000000 52 588 600 26 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] TOP.
+[treeopen] TOP.RV32_Unified.
+[treeopen] TOP.RV32_Unified.rv32_decode.
+[sst_width] 347
+[signals_width] 389
+[sst_expanded] 1
+[sst_vpaned_height] 229
+@28
+TOP.clock
+@22
+TOP.io_PC_f2d[31:0]
+TOP.io_PC_d2e[31:0]
+TOP.io_PC_e2m[31:0]
+[color] 2
+TOP.io_inst_f2d[31:0]
+[color] 2
+TOP.io_inst_d2e[31:0]
+[color] 2
+TOP.io_inst_e2m[31:0]
+@28
+TOP.reset
+@c00200
+-InstT_Fetch-Decode
+@28
+TOP.io_insttype_f2d_add
+TOP.io_insttype_f2d_addi
+TOP.io_insttype_f2d_and
+TOP.io_insttype_f2d_andi
+TOP.io_insttype_f2d_auipc
+TOP.io_insttype_f2d_beq
+TOP.io_insttype_f2d_bge
+TOP.io_insttype_f2d_bgeu
+TOP.io_insttype_f2d_blt
+TOP.io_insttype_f2d_bltu
+TOP.io_insttype_f2d_bne
+TOP.io_insttype_f2d_csrrc
+TOP.io_insttype_f2d_csrrci
+TOP.io_insttype_f2d_csrrs
+TOP.io_insttype_f2d_csrrsi
+TOP.io_insttype_f2d_csrrw
+TOP.io_insttype_f2d_csrrwi
+TOP.io_insttype_f2d_ebreak
+TOP.io_insttype_f2d_ecall
+TOP.io_insttype_f2d_fence
+TOP.io_insttype_f2d_fencei
+TOP.io_insttype_f2d_jal
+TOP.io_insttype_f2d_jalr
+TOP.io_insttype_f2d_lb
+TOP.io_insttype_f2d_lbu
+TOP.io_insttype_f2d_lh
+TOP.io_insttype_f2d_lhu
+TOP.io_insttype_f2d_lui
+TOP.io_insttype_f2d_lw
+TOP.io_insttype_f2d_or
+TOP.io_insttype_f2d_ori
+TOP.io_insttype_f2d_sb
+TOP.io_insttype_f2d_sh
+TOP.io_insttype_f2d_sll
+TOP.io_insttype_f2d_slli
+TOP.io_insttype_f2d_slt
+TOP.io_insttype_f2d_slti
+TOP.io_insttype_f2d_sltiu
+TOP.io_insttype_f2d_sltu
+TOP.io_insttype_f2d_sra
+TOP.io_insttype_f2d_srai
+TOP.io_insttype_f2d_srl
+TOP.io_insttype_f2d_srli
+TOP.io_insttype_f2d_sub
+TOP.io_insttype_f2d_sw
+TOP.io_insttype_f2d_xor
+TOP.io_insttype_f2d_xori
+@1401200
+-InstT_Fetch-Decode
+@c00200
+-InstT_Decode-Exec
+@28
+TOP.io_insttype_d2e_and
+TOP.io_insttype_d2e_addi
+TOP.io_insttype_d2e_andi
+TOP.io_insttype_d2e_add
+TOP.io_insttype_d2e_beq
+TOP.io_insttype_d2e_auipc
+TOP.io_insttype_d2e_bge
+TOP.io_insttype_d2e_bgeu
+TOP.io_insttype_d2e_blt
+TOP.io_insttype_d2e_bltu
+TOP.io_insttype_d2e_bne
+TOP.io_insttype_d2e_csrrc
+TOP.io_insttype_d2e_csrrci
+TOP.io_insttype_d2e_csrrs
+TOP.io_insttype_d2e_csrrsi
+TOP.io_insttype_d2e_csrrw
+TOP.io_insttype_d2e_csrrwi
+TOP.io_insttype_d2e_ebreak
+TOP.io_insttype_d2e_ecall
+TOP.io_insttype_d2e_fence
+TOP.io_insttype_d2e_fencei
+TOP.io_insttype_d2e_jal
+TOP.io_insttype_d2e_jalr
+TOP.io_insttype_d2e_lb
+TOP.io_insttype_d2e_lbu
+TOP.io_insttype_d2e_lh
+TOP.io_insttype_d2e_lhu
+TOP.io_insttype_d2e_lui
+TOP.io_insttype_d2e_lw
+TOP.io_insttype_d2e_or
+TOP.io_insttype_d2e_ori
+TOP.io_insttype_d2e_sb
+TOP.io_insttype_d2e_sh
+TOP.io_insttype_d2e_sll
+TOP.io_insttype_d2e_slli
+TOP.io_insttype_d2e_slt
+TOP.io_insttype_d2e_slti
+TOP.io_insttype_d2e_sltiu
+TOP.io_insttype_d2e_sltu
+TOP.io_insttype_d2e_sra
+TOP.io_insttype_d2e_srai
+TOP.io_insttype_d2e_srl
+TOP.io_insttype_d2e_srli
+TOP.io_insttype_d2e_sub
+TOP.io_insttype_d2e_sw
+TOP.io_insttype_d2e_xor
+TOP.io_insttype_d2e_xori
+@1401200
+-InstT_Decode-Exec
+@c00200
+-InstT_Exec_MEM
+@28
+TOP.io_insttype_e2m_add
+TOP.io_insttype_e2m_addi
+TOP.io_insttype_e2m_and
+TOP.io_insttype_e2m_andi
+TOP.io_insttype_e2m_auipc
+TOP.io_insttype_e2m_beq
+TOP.io_insttype_e2m_bge
+TOP.io_insttype_e2m_bgeu
+TOP.io_insttype_e2m_blt
+TOP.io_insttype_e2m_bltu
+TOP.io_insttype_e2m_bne
+TOP.io_insttype_e2m_csrrc
+TOP.io_insttype_e2m_csrrci
+TOP.io_insttype_e2m_csrrs
+TOP.io_insttype_e2m_csrrsi
+TOP.io_insttype_e2m_csrrw
+TOP.io_insttype_e2m_csrrwi
+TOP.io_insttype_e2m_ebreak
+TOP.io_insttype_e2m_ecall
+TOP.io_insttype_e2m_fence
+TOP.io_insttype_e2m_fencei
+TOP.io_insttype_e2m_jal
+TOP.io_insttype_e2m_jalr
+TOP.io_insttype_e2m_lb
+TOP.io_insttype_e2m_lbu
+TOP.io_insttype_e2m_lh
+TOP.io_insttype_e2m_lhu
+TOP.io_insttype_e2m_lui
+TOP.io_insttype_e2m_lw
+TOP.io_insttype_e2m_or
+TOP.io_insttype_e2m_ori
+TOP.io_insttype_e2m_sb
+TOP.io_insttype_e2m_sh
+TOP.io_insttype_e2m_sll
+TOP.io_insttype_e2m_slli
+TOP.io_insttype_e2m_slt
+TOP.io_insttype_e2m_slti
+TOP.io_insttype_e2m_sltiu
+TOP.io_insttype_e2m_sltu
+TOP.io_insttype_e2m_sra
+TOP.io_insttype_e2m_srai
+TOP.io_insttype_e2m_srl
+TOP.io_insttype_e2m_srli
+TOP.io_insttype_e2m_sub
+TOP.io_insttype_e2m_sw
+TOP.io_insttype_e2m_xor
+TOP.io_insttype_e2m_xori
+@1401200
+-InstT_Exec_MEM
+@200
+-
+@22
+TOP.RV32_Unified.rv32_decode_io_bus_d2e_pc[31:0]
+TOP.RV32_Unified.rv32_decode_io_bus_d2e_inst[31:0]
+TOP.RV32_Unified.rv32_decode.regf.io_ra1[4:0]
+TOP.RV32_Unified.rv32_decode.regf.io_ra2[4:0]
+@420
+TOP.RV32_Unified.rv32_decode.regf.io_rs1[31:0]
+TOP.RV32_Unified.rv32_decode.regf.io_rs2[31:0]
+@200
+-HEX
+@c00420
+[color] 3
+TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+@28
+[color] 3
+(0)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(1)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(2)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(3)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(4)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(5)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(6)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(7)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(8)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(9)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(10)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(11)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(12)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(13)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(14)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(15)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(16)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(17)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(18)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(19)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(20)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(21)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(22)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(23)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(24)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(25)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(26)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(27)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(28)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(29)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(30)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 3
+(31)TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+@1401200
+-group_end
+@420
+[color] 3
+TOP.RV32_Unified.rv32_exec.io_bus_e2m_data[31:0]
+@22
+[color] 3
+TOP.RV32_Unified.rv32_memwb.io_regf_wa1[4:0]
+@420
+[color] 3
+TOP.RV32_Unified.rv32_memwb.regf_wd1_reg[31:0]
+@c00200
+-RegFile
+@c00420
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+@28
+[color] 3
+(0)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(1)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(2)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(3)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(4)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(5)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(6)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(7)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(8)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(9)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(10)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(11)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(12)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(13)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(14)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(15)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(16)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(17)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(18)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(19)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(20)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(21)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(22)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(23)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(24)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(25)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(26)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(27)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(28)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(29)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(30)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+[color] 3
+(31)TOP.RV32_Unified.rv32_decode.regf.mem(0)[31:0]
+@1401200
+-group_end
+@420
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(1)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(2)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(3)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(4)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(5)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(6)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(7)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(8)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(9)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(10)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(11)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(12)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(13)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(14)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(15)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(16)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(17)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(18)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(19)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(20)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(21)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(22)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(23)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(24)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(25)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(26)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(27)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(28)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(29)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(30)[31:0]
+[color] 3
+TOP.RV32_Unified.rv32_decode.regf.mem(31)[31:0]
+@1401200
+-RegFile
+@200
+-Demical
+@22
+[color] 1
+TOP.RV32_Unified.rv32_decode_io_bus_d2e_imm[31:0]
+[color] 1
+TOP.RV32_Unified.rv32_exec.io_bus_e2m_data[31:0]
+@420
+[color] 1
+TOP.RV32_Unified.rv32_memwb.io_regf_wa1[4:0]
+@22
+[color] 1
+TOP.RV32_Unified.rv32_memwb.regf_wd1_reg[31:0]
+@200
+-
+-DMEM
+@28
+TOP.RV32_Unified.rv32_memwb.dmem_MPORT_2_en
+@22
+TOP.RV32_Unified.rv32_memwb.dmem_MPORT_2_addr[23:0]
+TOP.RV32_Unified.rv32_memwb.dmem_MPORT_2_data[31:0]
+@28
+TOP.RV32_Unified.rv32_memwb.io_regf_we1
+@200
+-
+@29
+[color] 2
+TOP.RV32_Unified.rv32_decode_io_DO_flush
+@200
+-
+-
+@22
+[color] 2
+TOP.RV32_Unified.rv32_exec_io_bus_e2m_pc[31:0]
+[color] 2
+TOP.RV32_Unified.io_bus_e2m_addr[31:0]
+[color] 2
+TOP.RV32_Unified.rv32_exec_io_bus_e2m_inst[31:0]
+@28
+TOP.RV32_Unified.rv32_forward.rs1_match[3:0]
+[pattern_trace] 1
+[pattern_trace] 0

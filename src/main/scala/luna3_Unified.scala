@@ -53,19 +53,9 @@ class RV32_Unified extends Module{
         rv32_fetch.io.PC_brunch := rv32_exec.io.bus_e2m.addr
 
     // Forwarding
-        val rv32_forward = Module(new RV32_forward)
-        rv32_forward.io.bus_d2e := rv32_decode.io.bus_d2e
-        rv32_forward.io.bus_e2m := rv32_exec.io.bus_e2m
-        rv32_forward.io.opcode_wb := rv32_memwb.io.opcode
-        rv32_forward.io.wa1_wb    := rv32_memwb.io.regf_wa1
-        rv32_forward.io.wd1_wb    := rv32_memwb.io.regf_wd1
-        
-        rv32_exec.io.In_rs1 := rv32_forward.io.In_rs1
-        rv32_exec.io.In_rs2 := rv32_forward.io.In_rs2
-
-        // rv32_exec.io.opcode_wb := rv32_memwb.io.opcode
-        // rv32_exec.io.wa1_wb    := rv32_memwb.io.regf_wa1
-        // rv32_exec.io.wd1_wb    := rv32_memwb.io.regf_wd1        
+        rv32_exec.io.opcode_wb := rv32_memwb.io.opcode
+        rv32_exec.io.wa1_wb    := rv32_memwb.io.regf_wa1
+        rv32_exec.io.wd1_wb    := rv32_memwb.io.regf_wd1        
 
     // Debug Ports
     val InstDebug_f2d = Module(new RV32_Instruction_Set_Debug)

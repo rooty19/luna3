@@ -12,13 +12,56 @@ class RV32_exec extends Module {
         val DO_brunch = Output(Bool())
         val bus_e2m = Output(new luna3_Bus_Set)
         val inst_e2m = Output(new luna3_RV32I_instruct_set) 
+        
         // Forwarding
-        val In_rs1 = Input(UInt(32.W))
-        val In_rs2 = Input(UInt(32.W))
-        // val opcode_wb = Input(UInt(7.W))
-        // val wa1_wb = Input(UInt(5.W))
-        // val wd1_wb = Input(UInt(32.W))
+        val wa1_wb = Input(UInt(5.W))
+        val wd1_wb = Input(UInt(32.W))
+        val opcode_wb = Input(UInt(6.W))
     })
+
+// Forwarding
+    val luna3_FA_Exec = Module(new luna3_Forwarding_Set)
+        luna3_FA_Exec.io.opcode := io.bus_d2e.opcode
+        val luna3_ra1EN_Exec = luna3_FA_Exec.io.ra1_enable
+        val luna3_ra2EN_Exec = luna3_FA_Exec.io.ra2_enable
+        val luna3_rdEN_Exec = luna3_FA_Exec.io.rd_enable
+
+    val luna3_FA_Mem = Module(new luna3_Forwarding_Set)
+        luna3_FA_Mem.io.opcode := io.bus_e2m.opcode
+        val luna3_ra1EN_Mem = luna3_FA_Mem.io.ra1_enable
+        val luna3_ra2EN_Mem = luna3_FA_Mem.io.ra2_enable
+        val luna3_rdEN_Mem = luna3_FA_Mem.io.rd_enable
+
+    val luna3_FA_WB = Module(new luna3_Forwarding_Set)
+        luna3_FA_WB.io.opcode := io.opcode_wb
+        val luna3_ra1EN_WB = luna3_FA_WB.io.ra1_enable
+        val luna3_ra2EN_WB = luna3_FA_WB.io.ra2_enable
+        val luna3_rdEN_WB = luna3_FA_WB.io.rd_enable
+
+    val rs2_match = Cat(luna3_rdEN_Mem, luna3_rdEN_WB, (luna3_ra2EN_Exec & luna3_rdEN_WB)&(io.bus_d2e.ra2 === io.bus_e2m.rd)&(io.bus_e2m.rd =/= 0.U), (luna3_ra2EN_Exec & luna3_rdEN_Mem)&(io.bus_d2e.ra2 === io.wa1_wb)&(io.bus_e2m.rd =/= 0.U))
+    val rs1_match = Cat(luna3_rdEN_Mem, luna3_rdEN_WB, (luna3_ra1EN_Exec & luna3_rdEN_WB)&(io.bus_d2e.ra1 === io.bus_e2m.rd)&(io.bus_e2m.rd =/= 0.U), (luna3_ra1EN_Exec & luna3_rdEN_Mem)&(io.bus_d2e.ra1 === io.wa1_wb)&(io.bus_e2m.rd =/= 0.U))
+
+    val In_rs2 = MuxCase(io.bus_d2e.rs2, Array(
+        (rs2_match === "b0101".U) -> io.wd1_wb,
+        (rs2_match === "b0111".U) -> io.wd1_wb,
+        (rs2_match === "b1010".U) -> io.bus_e2m.data,
+        (rs2_match === "b1011".U) -> io.bus_e2m.data,
+        (rs2_match === "b1101".U) -> io.wd1_wb,
+        (rs2_match === "b1110".U) -> io.bus_e2m.data,
+        (rs2_match === "b1111".U) -> io.bus_e2m.data,
+    ))
+
+    val In_rs1 = MuxCase(io.bus_d2e.rs1, Array(
+        (rs1_match === "b0101".U) -> io.wd1_wb,
+        (rs1_match === "b0111".U) -> io.wd1_wb,
+        (rs1_match === "b1010".U) -> io.bus_e2m.data,
+        (rs1_match === "b1011".U) -> io.bus_e2m.data,
+        (rs1_match === "b1101".U) -> io.wd1_wb,
+        (rs1_match === "b1110".U) -> io.bus_e2m.data,
+        (rs1_match === "b1111".U) -> io.bus_e2m.data,
+    ))
+// End of Forwaring
+
 
 val bus_i = RegInit(0.U.asTypeOf(new luna3_Bus_Set))  
 
@@ -51,40 +94,40 @@ val bus_i = RegInit(0.U.asTypeOf(new luna3_Bus_Set))
                                     bus_i.addr := "h00000000".U
                                     bus_i.rd := 0.U
                                     }    
-    .elsewhen(io.inst_d2e.add )     { bus_i.data :=io.In_rs1 + io.In_rs2}
-    .elsewhen(io.inst_d2e.sub ) 	{ bus_i.data :=io.In_rs1 - io.In_rs2}
-    .elsewhen(io.inst_d2e.sll ) 	{ bus_i.data :=io.In_rs1 << io.In_rs2(4,0)}
-    .elsewhen(io.inst_d2e.slt ) 	{ bus_i.data :=(io.In_rs1.asSInt() < io.In_rs2.asSInt()).asUInt()}
-    .elsewhen(io.inst_d2e.sltu )	{ bus_i.data :=io.In_rs1 < io.In_rs2}
-    .elsewhen(io.inst_d2e.xor ) 	{ bus_i.data :=io.In_rs1 ^ io.In_rs2}
-    .elsewhen(io.inst_d2e.srl ) 	{ bus_i.data :=io.In_rs1 >> io.In_rs2(4,0)}
-    .elsewhen(io.inst_d2e.sra ) 	{ bus_i.data := (io.In_rs1.asSInt() >> io.In_rs2(4,0)).asUInt()}
-    .elsewhen(io.inst_d2e.or )  	{ bus_i.data :=io.In_rs1 | io.In_rs2}
-    .elsewhen(io.inst_d2e.and ) 	{ bus_i.data :=io.In_rs1 & io.In_rs2}
+    .elsewhen(io.inst_d2e.add )     { bus_i.data :=In_rs1 + In_rs2}
+    .elsewhen(io.inst_d2e.sub ) 	{ bus_i.data :=In_rs1 - In_rs2}
+    .elsewhen(io.inst_d2e.sll ) 	{ bus_i.data :=In_rs1 << In_rs2(4,0)}
+    .elsewhen(io.inst_d2e.slt ) 	{ bus_i.data :=(In_rs1.asSInt() < In_rs2.asSInt()).asUInt()}
+    .elsewhen(io.inst_d2e.sltu )	{ bus_i.data :=In_rs1 < In_rs2}
+    .elsewhen(io.inst_d2e.xor ) 	{ bus_i.data :=In_rs1 ^ In_rs2}
+    .elsewhen(io.inst_d2e.srl ) 	{ bus_i.data :=In_rs1 >> In_rs2(4,0)}
+    .elsewhen(io.inst_d2e.sra ) 	{ bus_i.data := (In_rs1.asSInt() >> In_rs2(4,0)).asUInt()}
+    .elsewhen(io.inst_d2e.or )  	{ bus_i.data :=In_rs1 | In_rs2}
+    .elsewhen(io.inst_d2e.and ) 	{ bus_i.data :=In_rs1 & In_rs2}
 
     // I Inst (ALU)
-    .elsewhen(io.inst_d2e.addi ) 	{ bus_i.data :=io.In_rs1 + io.bus_d2e.imm}
-    .elsewhen(io.inst_d2e.slti ) 	{ bus_i.data :=io.In_rs1.asSInt() < io.bus_d2e.imm.asSInt().asSInt()}
-    .elsewhen(io.inst_d2e.sltiu )	{ bus_i.data :=io.In_rs1 < io.bus_d2e.imm}    
-    .elsewhen(io.inst_d2e.xori ) 	{ bus_i.data :=io.In_rs1 ^ io.bus_d2e.imm} 
-    .elsewhen(io.inst_d2e.ori )  	{ bus_i.data :=io.In_rs1 | io.bus_d2e.imm}
-    .elsewhen(io.inst_d2e.andi ) 	{ bus_i.data :=io.In_rs1 & io.bus_d2e.imm}
-    .elsewhen(io.inst_d2e.slli ) 	{ bus_i.data :=io.In_rs1 << io.In_rs2(4,0)}
-    .elsewhen(io.inst_d2e.srli ) 	{ bus_i.data :=io.In_rs1 >> io.In_rs2(4,0)}
-    .elsewhen(io.inst_d2e.srai ) 	{ bus_i.data := (io.In_rs1.asSInt() >> io.In_rs2(4,0)).asUInt()}
+    .elsewhen(io.inst_d2e.addi ) 	{ bus_i.data :=In_rs1 + io.bus_d2e.imm}
+    .elsewhen(io.inst_d2e.slti ) 	{ bus_i.data :=In_rs1.asSInt() < io.bus_d2e.imm.asSInt().asSInt()}
+    .elsewhen(io.inst_d2e.sltiu )	{ bus_i.data :=In_rs1 < io.bus_d2e.imm}    
+    .elsewhen(io.inst_d2e.xori ) 	{ bus_i.data :=In_rs1 ^ io.bus_d2e.imm} 
+    .elsewhen(io.inst_d2e.ori )  	{ bus_i.data :=In_rs1 | io.bus_d2e.imm}
+    .elsewhen(io.inst_d2e.andi ) 	{ bus_i.data :=In_rs1 & io.bus_d2e.imm}
+    .elsewhen(io.inst_d2e.slli ) 	{ bus_i.data :=In_rs1 << In_rs2(4,0)}
+    .elsewhen(io.inst_d2e.srli ) 	{ bus_i.data :=In_rs1 >> In_rs2(4,0)}
+    .elsewhen(io.inst_d2e.srai ) 	{ bus_i.data := (In_rs1.asSInt() >> In_rs2(4,0)).asUInt()}
 
     // // I Inst (Load)
-    .elsewhen(io.inst_d2e.lb ) 	{ bus_i.addr :=io.In_rs1 + io.bus_d2e.imm}
-    .elsewhen(io.inst_d2e.lh ) 	{ bus_i.addr :=io.In_rs1 + io.bus_d2e.imm}  
-    .elsewhen(io.inst_d2e.lw ) 	{ bus_i.addr :=io.In_rs1 + io.bus_d2e.imm}  
-    .elsewhen(io.inst_d2e.lbu ) { bus_i.addr :=io.In_rs1 + io.bus_d2e.imm}  
-    .elsewhen(io.inst_d2e.lhu ) { bus_i.addr :=io.In_rs1 + io.bus_d2e.imm}
+    .elsewhen(io.inst_d2e.lb ) 	{ bus_i.addr :=In_rs1 + io.bus_d2e.imm}
+    .elsewhen(io.inst_d2e.lh ) 	{ bus_i.addr :=In_rs1 + io.bus_d2e.imm}  
+    .elsewhen(io.inst_d2e.lw ) 	{ bus_i.addr :=In_rs1 + io.bus_d2e.imm}  
+    .elsewhen(io.inst_d2e.lbu ) { bus_i.addr :=In_rs1 + io.bus_d2e.imm}  
+    .elsewhen(io.inst_d2e.lhu ) { bus_i.addr :=In_rs1 + io.bus_d2e.imm}
 
     // // I Inst (jalr)
     .elsewhen(io.inst_d2e.jalr){DO_flush_reg := true.B
                                 DO_brunch_reg := true.B
                                 bus_i.data := {io.bus_d2e.pc  + "h00000004".U}
-                                bus_i.addr := (io.In_rs1 + io.bus_d2e.imm)&"hFFFFFFFE".U}   
+                                bus_i.addr := (In_rs1 + io.bus_d2e.imm)&"hFFFFFFFE".U}   
 
     // // I Inst (Control Status Reg)
     // (io.inst_d2e.fence ) ->     
@@ -100,35 +143,35 @@ val bus_i = RegInit(0.U.asTypeOf(new luna3_Bus_Set))
     // (io.inst_d2e.csrrci ) ->    
 
     // // S inst
-    .elsewhen(io.inst_d2e.sb ) {bus_i.data := io.In_rs2 & "h000000ff".U
-                                bus_i.addr := io.In_rs1 + io.bus_d2e.imm}
-    .elsewhen(io.inst_d2e.sh ) {bus_i.data := io.In_rs2 & "h0000ffff".U
-                                bus_i.addr := io.In_rs1 + io.bus_d2e.imm}
-    .elsewhen(io.inst_d2e.sw ) {bus_i.data := io.In_rs2
-                                bus_i.addr := io.In_rs1 + io.bus_d2e.imm}
+    .elsewhen(io.inst_d2e.sb ) {bus_i.data := In_rs2 & "h000000ff".U
+                                bus_i.addr := In_rs1 + io.bus_d2e.imm}
+    .elsewhen(io.inst_d2e.sh ) {bus_i.data := In_rs2 & "h0000ffff".U
+                                bus_i.addr := In_rs1 + io.bus_d2e.imm}
+    .elsewhen(io.inst_d2e.sw ) {bus_i.data := In_rs2
+                                bus_i.addr := In_rs1 + io.bus_d2e.imm}
     // B Inst
-    .elsewhen(io.inst_d2e.beq) {DO_flush_reg := (io.In_rs1 === io.In_rs2)
-                                DO_brunch_reg := (io.In_rs1 === io.In_rs2)
+    .elsewhen(io.inst_d2e.beq) {DO_flush_reg := (In_rs1 === In_rs2)
+                                DO_brunch_reg := (In_rs1 === In_rs2)
                                 bus_i.addr := (io.bus_d2e.pc + io.bus_d2e.imm)}
 
-    .elsewhen(io.inst_d2e.bne) {DO_flush_reg := (io.In_rs1 =/= io.In_rs2)
-                                DO_brunch_reg := (io.In_rs1 =/= io.In_rs2)
+    .elsewhen(io.inst_d2e.bne) {DO_flush_reg := (In_rs1 =/= In_rs2)
+                                DO_brunch_reg := (In_rs1 =/= In_rs2)
                                 bus_i.addr := (io.bus_d2e.pc + io.bus_d2e.imm)}
 
-    .elsewhen(io.inst_d2e.blt) {DO_flush_reg := ((io.In_rs1.asSInt() <= io.In_rs2.asSInt()).asBool())
-                                DO_brunch_reg := ((io.In_rs1.asSInt() <= io.In_rs2.asSInt()).asBool())
+    .elsewhen(io.inst_d2e.blt) {DO_flush_reg := ((In_rs1.asSInt() <= In_rs2.asSInt()).asBool())
+                                DO_brunch_reg := ((In_rs1.asSInt() <= In_rs2.asSInt()).asBool())
                                 bus_i.addr := (io.bus_d2e.pc + io.bus_d2e.imm)}
 
-    .elsewhen(io.inst_d2e.bge) {DO_flush_reg := ((io.In_rs1.asSInt() > io.In_rs2.asSInt()).asBool())
-                                DO_brunch_reg := ((io.In_rs1.asSInt() > io.In_rs2.asSInt()).asBool())
+    .elsewhen(io.inst_d2e.bge) {DO_flush_reg := ((In_rs1.asSInt() > In_rs2.asSInt()).asBool())
+                                DO_brunch_reg := ((In_rs1.asSInt() > In_rs2.asSInt()).asBool())
                                 bus_i.addr := (io.bus_d2e.pc + io.bus_d2e.imm)}
 
-    .elsewhen(io.inst_d2e.bltu){DO_flush_reg := (io.In_rs1 <= io.In_rs2)
-                                DO_brunch_reg := (io.In_rs1 <= io.In_rs2)
+    .elsewhen(io.inst_d2e.bltu){DO_flush_reg := (In_rs1 <= In_rs2)
+                                DO_brunch_reg := (In_rs1 <= In_rs2)
                                 bus_i.addr := (io.bus_d2e.pc + io.bus_d2e.imm)} 
 
-    .elsewhen(io.inst_d2e.bgeu){DO_flush_reg := (io.In_rs1 > io.In_rs2)
-                                DO_brunch_reg := (io.In_rs1 > io.In_rs2)
+    .elsewhen(io.inst_d2e.bgeu){DO_flush_reg := (In_rs1 > In_rs2)
+                                DO_brunch_reg := (In_rs1 > In_rs2)
                                 bus_i.addr := (io.bus_d2e.pc + io.bus_d2e.imm)}  
 
     // U Inst

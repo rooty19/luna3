@@ -111,11 +111,8 @@ class RV32_Decode extends Module {
     }
     io.bus_d2e := busi_Reg
 
-
-    //val RV32I_InstSet = Wire(new luna3_RV32I_instruct_set)
     val RV32I_InstSet_Reg = RegInit(0.U.asTypeOf(new luna3_RV32I_instruct_set))
     //.otherwise    {RV32I_InstSet_Reg := RV32I_InstSet}
-    
 
     // Instrunction Decode
     RV32I_InstSet_Reg.add       := (busi.opcode === RV32I_InstType.op_R & busi.funct7_R === "b0000000".U & busi.funct3 === "b000".U )

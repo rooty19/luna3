@@ -97,9 +97,6 @@ class RV32_Decode extends Module {
         busi_Reg.ra2 := 0.U
     }.otherwise{
         busi_Reg := busi
-        // Forwarding
-        when((busi.ra1 === io.regf_wa1)&(io.regf_wa1 =/= 0.U)&(io.regf_we1)){busi_Reg.rs1 := io.regf_wd1}
-        when((busi.ra2 === io.regf_wa1)&(io.regf_wa1 =/= 0.U)&(io.regf_we1)){busi_Reg.rs2 := io.regf_wd1}
 
         when(busi.opcode === RV32I_InstType.op_I_ALU)        {busi_Reg.imm := imm_I.asUInt()}
         .elsewhen(busi.opcode === RV32I_InstType.op_I_LOAD)  {busi_Reg.imm := imm_I.asUInt()}

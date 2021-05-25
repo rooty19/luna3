@@ -40,12 +40,17 @@ class RV32_Decode extends Module {
         
         val bus_d2e = Output(new luna3_Bus_Set)
         val inst_d2e = Output(new luna3_RV32I_instruct_set)
-    })
+        // Forwarding 
+        val bus_e2m = Input(new luna3_Bus_Set)
+ 
+        // Pipeline Stall
+        val DO_stall_count = Input(UInt(2.W))
 
+    })
     val busi = Wire(new luna3_Bus_Set)
     val regf = Module(new Registerfile)
-
     busi := 0.U.asTypeOf(new luna3_Bus_Set)
+
     // Divide Instruction
     busi.opcode := io.inst_f2d(6,0)
     busi.rd     := io.inst_f2d(11,7)
@@ -59,19 +64,35 @@ class RV32_Decode extends Module {
     // Instruction -> Regfile
     regf.io.ra1 := busi.ra1
     regf.io.ra2 := busi.ra2
-    busi.rs1    := regf.io.rs1
-    busi.rs2    := regf.io.rs2
     regf.io.wa1   := io.regf_wa1
     regf.io.wd1   := io.regf_wd1
     regf.io.we1   := io.regf_we1
-
     busi.imm      := 0.U
+
+
+    // Forwarding 
+    val luna3_FA_Dec = Module(new luna3_Forwarding_Set)
+        luna3_FA_Dec.io.opcode := busi.opcode
+        val luna3_rs1EN_Dec = luna3_FA_Dec.io.ra1_enable
+        val luna3_rs2EN_Dec = luna3_FA_Dec.io.ra2_enable
+        
+    val luna3_FA_Mem = Module(new luna3_Forwarding_Set)
+        luna3_FA_Mem.io.opcode := io.bus_e2m.opcode
+        val luna3_rdEN_Mem = luna3_FA_Mem.io.rd_enable
+
+    val mux_FA_rs1 = Wire(Bool())
+    val mux_FA_rs2 = Wire(Bool())
+        mux_FA_rs1 := (luna3_rs1EN_Dec & luna3_rdEN_Mem) & (io.bus_e2m.rd === busi.ra1) & (busi.ra1 =/= 0.U)
+        mux_FA_rs2 := (luna3_rs2EN_Dec & luna3_rdEN_Mem) & (io.bus_e2m.rd === busi.ra2) & (busi.ra2 =/= 0.U)        
+
+    busi.rs1    := Mux(mux_FA_rs1, io.bus_e2m.data, regf.io.rs1)
+    busi.rs2    := Mux(mux_FA_rs2, io.bus_e2m.data, regf.io.rs2)
 
     // Immediate
     val imm_I_raw    = io.inst_f2d(31,20).asUInt()
     val imm_S_raw    = Cat(io.inst_f2d(31,25), io.inst_f2d(11,7)).asUInt()
     val imm_B_raw    = Cat(io.inst_f2d(31,31), io.inst_f2d(7,7), io.inst_f2d(30,25), io.inst_f2d(11,8), 0.U(1.W)).asUInt()
-    val imm_U_raw    = Cat(io.inst_f2d(31,12).asUInt(), 0.U(20.W))
+    val imm_U_raw    = Cat(io.inst_f2d(31,12).asUInt(), 0.U(12.W))
     val imm_J_raw    = Cat(io.inst_f2d(31,31), io.inst_f2d(19,12), io.inst_f2d(20,20), io.inst_f2d(30,21), 0.U(1.W)).asUInt()
 
     val imm_I = Wire(SInt(32.W))
@@ -95,9 +116,13 @@ class RV32_Decode extends Module {
         busi_Reg.rd := 0.U
         busi_Reg.ra1 := 0.U
         busi_Reg.ra2 := 0.U
+    }.elsewhen(io.DO_stall_count =/= "b10".U){
+        busi_Reg := busi_Reg
     }.otherwise{
         busi_Reg := busi
-
+        when((io.regf_wa1 === busi.ra1) & io.regf_we1 & (busi.ra1 =/= 0.U)){busi_Reg.rs1 := io.regf_wd1}
+        when((io.regf_wa1 === busi.ra2) & io.regf_we1 & (busi.ra2 =/= 0.U)){busi_Reg.rs2 := io.regf_wd1}
+        
         when(busi.opcode === RV32I_InstType.op_I_ALU)        {busi_Reg.imm := imm_I.asUInt()}
         .elsewhen(busi.opcode === RV32I_InstType.op_I_LOAD)  {busi_Reg.imm := imm_I.asUInt()}
         .elsewhen(busi.opcode === RV32I_InstType.op_I_FRNCE) {busi_Reg.imm := imm_I.asUInt()}

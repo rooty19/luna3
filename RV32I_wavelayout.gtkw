@@ -1,13 +1,13 @@
 [*]
 [*] GTKWave Analyzer v3.3.86 (w)1999-2017 BSI
-[*] Fri May 14 10:20:32 2021
+[*] Tue May 18 08:24:35 2021
 [*]
 [dumpfile] "/home/stereos/luna3/test_run_dir/chapter4/RV32_Unified/RV32_Unified.vcd"
-[dumpfile_mtime] "Fri May 14 03:38:56 2021"
-[dumpfile_size] 2009958
+[dumpfile_mtime] "Tue May 18 08:22:42 2021"
+[dumpfile_size] 2048239
 [savefile] "/home/stereos/luna3/RV32I_wavelayout.gtkw"
 [timestart] 33
-[size] 1824 1153
+[size] 3072 1665
 [pos] -1 -1
 *-2.000000 52 588 600 26 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] TOP.
@@ -16,7 +16,7 @@
 [sst_width] 347
 [signals_width] 389
 [sst_expanded] 1
-[sst_vpaned_height] 229
+[sst_vpaned_height] 795
 @28
 TOP.clock
 @22
@@ -192,11 +192,11 @@ TOP.io_insttype_e2m_xori
 @22
 TOP.RV32_Unified.rv32_decode_io_bus_d2e_pc[31:0]
 TOP.RV32_Unified.rv32_decode_io_bus_d2e_inst[31:0]
-TOP.RV32_Unified.rv32_decode.regf.io_ra1[4:0]
-TOP.RV32_Unified.rv32_decode.regf.io_ra2[4:0]
-@420
-TOP.RV32_Unified.rv32_decode.regf.io_rs1[31:0]
-TOP.RV32_Unified.rv32_decode.regf.io_rs2[31:0]
+TOP.RV32_Unified.rv32_exec.io_bus_d2e_ra1[4:0]
+TOP.RV32_Unified.rv32_exec.io_bus_d2e_ra2[4:0]
+TOP.RV32_Unified.rv32_exec.In_rs1[31:0]
+@23
+TOP.RV32_Unified.rv32_exec.In_rs2[31:0]
 @200
 -HEX
 @c00420
@@ -440,7 +440,7 @@ TOP.RV32_Unified.rv32_memwb.dmem_MPORT_2_data[31:0]
 TOP.RV32_Unified.rv32_memwb.io_regf_we1
 @200
 -
-@29
+@28
 [color] 2
 TOP.RV32_Unified.rv32_decode_io_DO_flush
 @200
@@ -454,6 +454,8 @@ TOP.RV32_Unified.io_bus_e2m_addr[31:0]
 [color] 2
 TOP.RV32_Unified.rv32_exec_io_bus_e2m_inst[31:0]
 @28
-TOP.RV32_Unified.rv32_forward.rs1_match[3:0]
+TOP.RV32_Unified.rv32_exec.rs1_match[3:0]
+TOP.RV32_Unified.rv32_exec.luna3_FA_WB_io_rd_enable
+TOP.RV32_Unified.rv32_exec.luna3_FA_Exec_io_ra1_enable
 [pattern_trace] 1
 [pattern_trace] 0

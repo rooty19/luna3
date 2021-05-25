@@ -26,8 +26,6 @@ class RV32_Unified extends Module{
     val rv32_exec = Module(new RV32_exec())
     val rv32_memwb = Module(new RV32_memwb())
 
-    rv32_fetch.io.DO_next := true.B
-
     // Fetch -> Decode
         rv32_decode.io.PC_f2d := rv32_fetch.io.PC_now
         rv32_decode.io.inst_f2d := rv32_fetch.io.inst
@@ -56,6 +54,10 @@ class RV32_Unified extends Module{
         rv32_exec.io.opcode_wb := rv32_memwb.io.opcode
         rv32_exec.io.wa1_wb    := rv32_memwb.io.regf_wa1
         rv32_exec.io.wd1_wb    := rv32_memwb.io.regf_wd1        
+        rv32_decode.io.bus_e2m := rv32_exec.io.bus_e2m
+    // Pipeline Stall
+        rv32_fetch.io.DO_stall_count := rv32_exec.io.DO_stall_count
+        rv32_decode.io.DO_stall_count := rv32_exec.io.DO_stall_count
 
     // Debug Ports
     val InstDebug_f2d = Module(new RV32_Instruction_Set_Debug)

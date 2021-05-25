@@ -5,7 +5,7 @@ int fibonacci(int x){
 }
 
 int main(){
-    int A = fibonacci(6);
+    int A = fibonacci(4);
     while(1){
     }
 }

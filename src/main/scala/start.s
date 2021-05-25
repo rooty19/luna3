@@ -3,4 +3,5 @@
 .globl _start;
 
 _start:
-    call main
+    li sp, 0x7fbebda0
+    j main

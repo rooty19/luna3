@@ -3,6 +3,7 @@ package chapter4
 import chisel3._
 import chisel3.util._
 
+// Debugging Port
 class RV32_Instruction_Set_Debug extends Module {
     val io=IO(new Bundle{
         val instr = Input(UInt(32.W))

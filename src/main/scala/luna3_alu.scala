@@ -4,12 +4,18 @@ import chisel3._
 import chisel3.util._
 import javax.swing.InputMap
 
+// Luna3 Exec Stage
+
 class RV32_exec extends Module {
     val io = IO( new Bundle{
+        // Decode stage -> Exec Stage bus
         val bus_d2e = Input(new luna3_Bus_Set)
-        val inst_d2e = Input(new luna3_RV32I_instruct_set)        
+        val inst_d2e = Input(new luna3_RV32I_instruct_set)
+
         val DO_flush = Output(Bool())
         val DO_brunch = Output(Bool())
+        
+        // Exec stage -> MemWB stage
         val bus_e2m = Output(new luna3_Bus_Set)
         val inst_e2m = Output(new luna3_RV32I_instruct_set) 
         
@@ -20,10 +26,10 @@ class RV32_exec extends Module {
 
         // Pipeline Stall
         val DO_stall_count = Output(UInt(2.W))
-        val e2m_bne = Output(Bool())
     })
-    io.e2m_bne := io.inst_e2m.bne
+
 // Forwarding
+    // Forwarding Detection(Exec stage's rs1/rs2 == Mem/WB stage's rd?)
     val luna3_FA_Exec = Module(new luna3_Forwarding_Set)
         luna3_FA_Exec.io.opcode := io.bus_d2e.opcode
         val luna3_ra1EN_Exec = luna3_FA_Exec.io.ra1_enable
@@ -45,9 +51,16 @@ class RV32_exec extends Module {
     val DO_stall_count_reg = RegInit("b10".U(2.W))
     val DO_stall_count_reg_Next = RegInit("b00".U(2.W))
     DO_stall_count_reg_Next := DO_stall_count_reg
-    val rs2_match = Cat(luna3_rdEN_Mem, luna3_rdEN_WB, (luna3_ra2EN_Exec & luna3_rdEN_Mem)&(io.bus_d2e.ra2 === io.bus_e2m.rd)&(io.bus_e2m.rd =/= 0.U)&(DO_stall_count_reg_Next === "b10".U), (luna3_ra2EN_Exec & luna3_rdEN_WB)&(io.bus_d2e.ra2 === io.wa1_wb)&(io.wa1_wb =/= 0.U))
-    val rs1_match = Cat(luna3_rdEN_Mem, luna3_rdEN_WB, (luna3_ra1EN_Exec & luna3_rdEN_Mem)&(io.bus_d2e.ra1 === io.bus_e2m.rd)&(io.bus_e2m.rd =/= 0.U)&(DO_stall_count_reg_Next === "b10".U), (luna3_ra1EN_Exec & luna3_rdEN_WB)&(io.bus_d2e.ra1 === io.wa1_wb)&(io.wa1_wb =/= 0.U))
 
+    // Forwarding Detection (2)
+    val rs2_match = Cat(luna3_rdEN_Mem, luna3_rdEN_WB, 
+                            (luna3_ra2EN_Exec & luna3_rdEN_Mem)&(io.bus_d2e.ra2 === io.bus_e2m.rd)&(io.bus_e2m.rd =/= 0.U)&(DO_stall_count_reg_Next === "b10".U),
+                            (luna3_ra2EN_Exec & luna3_rdEN_WB)&(io.bus_d2e.ra2 === io.wa1_wb)&(io.wa1_wb =/= 0.U))
+    val rs1_match = Cat(luna3_rdEN_Mem,luna3_rdEN_WB,
+                            (luna3_ra1EN_Exec & luna3_rdEN_Mem)&(io.bus_d2e.ra1 === io.bus_e2m.rd)&(io.bus_e2m.rd =/= 0.U)&(DO_stall_count_reg_Next === "b10".U),
+                            (luna3_ra1EN_Exec & luna3_rdEN_WB)&(io.bus_d2e.ra1 === io.wa1_wb)&(io.wa1_wb =/= 0.U))
+    
+    // Forwarding Mux
     val In_rs2 = MuxCase(io.bus_d2e.rs2, Array(
         (rs2_match === "b0101".U) -> io.wd1_wb,
         (rs2_match === "b0111".U) -> io.wd1_wb,
@@ -68,6 +81,7 @@ class RV32_exec extends Module {
         (rs1_match === "b1111".U) -> io.bus_e2m.data,
     ))
 // End of Forwaring
+
     val bus_i = RegInit(0.U.asTypeOf(new luna3_Bus_Set))  
 
     val buf_rs1 = RegInit(0.U(32.W))
@@ -114,18 +128,13 @@ class RV32_exec extends Module {
     val In_rs1_m = Mux(mux_rs2, buf_rs1, In_rs1)
     val In_rs2_m = Mux(mux_rs2, buf_rs2, In_rs2)    
 
-    // when(DO_wd2alu){
-    //     buf_rs1 := In_rs1
-    //     buf_rs2 := In_rs2
-    //     mux_rs1 := true.B
-    //     mux_rs2 := true.B
-    // }
     when(DO_flush_reg)              {DO_flush_reg := false.B
                                     DO_brunch_reg := false.B
                                     bus_i.data := "h00000000".U
                                     bus_i.addr := "h00000000".U
                                     bus_i.rd := 0.U
-                                    }    
+                                    }
+    // Stalling
     .elsewhen(DO_stall_count_reg =/= "b10".U){
         when(DO_stall_count_reg === "b00".U){
             DO_stall_count_reg := "b10".U
@@ -134,7 +143,7 @@ class RV32_exec extends Module {
             buf_rs2 := In_rs2
         }.otherwise{DO_stall_count_reg := DO_stall_count_reg - 1.U}
     }
-    .elsewhen(inst_seled.add )     { bus_i.data :=In_rs1_m + In_rs2_m}
+    .elsewhen(inst_seled.add )  { bus_i.data :=In_rs1_m + In_rs2_m}
     .elsewhen(inst_seled.sub ) 	{ bus_i.data :=In_rs1_m - In_rs2_m}
     .elsewhen(inst_seled.sll ) 	{ bus_i.data :=In_rs1_m << In_rs2_m(4,0)}
     .elsewhen(inst_seled.slt ) 	{ bus_i.data :=(In_rs1_m.asSInt() < In_rs2_m.asSInt()).asUInt()}

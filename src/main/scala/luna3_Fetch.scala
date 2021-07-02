@@ -4,6 +4,7 @@ import chisel3._
 import chisel3.util._
 import chisel3.util.experimental.loadMemoryFromFile
 
+// Fetch stage
 class RV32_Fetch extends Module {
     val io=IO(new Bundle{
         val DO_stall_count = Input(UInt(2.W))

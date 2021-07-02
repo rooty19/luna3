@@ -6,17 +6,18 @@ import chisel3.util.experimental.loadMemoryFromFile
 
 class RV32_memwb extends Module{
     val io = IO(new Bundle{
+        // Exec to MemWB stage
         val bus_e2m   = Input(new luna3_Bus_Set)
         val inst_e2m = Input(new luna3_RV32I_instruct_set)
         val DO_flush = Input(Bool())
+
         val opcode   = Output(UInt(7.W))
         val regf_wa1 = Output(UInt(5.W))
         val regf_wd1 = Output(UInt(32.W))
         val regf_we1 = Output(Bool())
     })
 
-// Mem Stage
-
+    // Mem Stage
     // Write to MEM
     val dmem = Mem(0xffffff, UInt(32.W))
     loadMemoryFromFile(dmem, "src/main/scala/dmem.txt")
@@ -35,6 +36,7 @@ class RV32_memwb extends Module{
 
     val itype = new RV32I_InstType_B
     
+    // load from DMEM and WB
     when(   io.bus_e2m.opcode === itype.op_R        |
             io.bus_e2m.opcode === itype.op_I_ALU    | 
             io.bus_e2m.opcode === itype.op_I_JALR   |

@@ -3,6 +3,7 @@ package chapter4
 import chisel3._
 import chisel3.util._
 
+// Register file
 class Registerfile extends Module{
     val io = IO(new Bundle{
         val ra1 = Input(UInt(5.W))
@@ -28,7 +29,7 @@ class Registerfile extends Module{
     }
 }
 
-
+// Decode Stage
 class RV32_Decode extends Module {
     val io = IO(new Bundle{
         val PC_f2d = Input(UInt(32.W))

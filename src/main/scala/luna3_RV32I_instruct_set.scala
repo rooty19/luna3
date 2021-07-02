@@ -3,7 +3,7 @@ package chapter4
 import chisel3._
 import chisel3.util._
 
-
+// constant and bus define
 class luna3_Bus_Set extends Bundle{
     val pc = UInt(32.W)
     val inst = UInt(32.W)
@@ -19,6 +19,7 @@ class luna3_Bus_Set extends Bundle{
     val addr    = UInt(32.W)
     val data    = UInt(32.W)    
 }
+
 class luna3_Forwarding_Line extends Bundle{
     val ra1_enable = Bool()
     val ra2_enable = Bool()
